@@ -95,8 +95,17 @@ const CategoriesTabs = () => {
                 <Tab
                   key={category.key}
                   title={
-                    <Link href={`/posts?category_id=${category.key}`}>
+                    <Link
+                      href={`/posts?category_id=${category.key}`}
+                      shallow={true}
+                    >
                       <div
+                        // onClick={() => {
+                        //   const params = new URLSearchParams(searchParams);
+                        //   params.set("category_id", category.key.toString());
+                        //   const newPath = `${pathname}?${params.toString()}`;
+                        //   router.replace(newPath);
+                        // }}
                         ref={(ref) => (tabRefs.current[index] = ref)}
                         className="flex items-center space-x-2"
                       >

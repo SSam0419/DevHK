@@ -11,7 +11,6 @@ const Banner = () => {
         and explore the latest trends in software development.
       </p>
       <p>{"</intro>"}</p>
-      <Button color="primary">Sign Up</Button>
     </div>
   );
 };
