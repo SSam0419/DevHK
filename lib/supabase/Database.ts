@@ -326,7 +326,7 @@ export type Database = {
       };
       post_with_comments_and_user: {
         Row: {
-          comments: Json[] | null;
+          comments: any[] | Json[] | null;
           post_category_id: number | null;
           post_content: string | null;
           post_created_at: string | null;

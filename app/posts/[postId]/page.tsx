@@ -58,11 +58,12 @@ export default async function Page({ params }: { params: { postId: string } }) {
         <div className="font-semibold text-xl">Recent Comments</div>
         {data.comments &&
           data.comments
-            .sort(
-              (a, b) =>
+            .sort((a, b) => {
+              return (
                 new Date(b.comment_created_at).getTime() -
                 new Date(a.comment_created_at).getTime()
-            )
+              );
+            })
             .map((comment, idx) => {
               // "comment_id": "30745a3c-02c3-45bd-9b74-b50a50c55b1f",
               // "comment_content": "good article!",
