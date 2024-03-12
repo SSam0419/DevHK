@@ -27,8 +27,12 @@ const SignUpForm = () => {
         emailRedirectTo: "http://localhost:3000",
       },
     });
-    console.log({ data, error });
-    updateHint({ error: error, text: "Sign Up Successful!" });
+
+    updateHint({
+      error: error,
+      text: "Sign Up Successful! Create your user profile!",
+    });
+
     setIsLoading(false);
   }
 

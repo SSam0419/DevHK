@@ -11,7 +11,6 @@ const PostList = async ({ categoryId }: { categoryId: number }) => {
     .select("*")
     .eq("post_category_id", categoryId)
     .order("post_created_at", { ascending: false });
-  const user = await supabase.auth.getUser();
 
   return (
     <div className="flex flex-col gap-5">
@@ -23,11 +22,7 @@ const PostList = async ({ categoryId }: { categoryId: number }) => {
       {data?.map((post: any) => {
         return (
           <div key={post.post_id}>
-            <PostPreviewCard
-              post={post}
-              previewType="PostList"
-              userId={user.data.user ? user.data.user.id : null}
-            />
+            <PostPreviewCard post={post} previewType="PostList" />
           </div>
         );
       })}

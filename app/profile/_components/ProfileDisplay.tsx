@@ -3,9 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProfileForm from "./ProfileForm";
 import { useUserStore } from "@/lib/states/User";
 import { supabase } from "@/lib/supabase/client";
-import PostButtonBar from "@/app/posts/_components/PostButtonBar/PostButtonBar";
-import { formatDateString } from "@/lib/utils/formatDateString";
-import { Chip, Spacer, Divider, Skeleton } from "@nextui-org/react";
+import { Spacer, Skeleton } from "@nextui-org/react";
 import Link from "next/link";
 import PostPreviewCard from "@/components/PostPreviewCard";
 
@@ -56,11 +54,7 @@ const ProfileDisplay = () => {
           {myPost.map((post: any) => {
             return (
               <div key={post.post_id}>
-                <PostPreviewCard
-                  post={post}
-                  previewType="Profile"
-                  userId={userProfile ? userProfile.id : null}
-                />
+                <PostPreviewCard post={post} previewType="Profile" />
               </div>
             );
           })}

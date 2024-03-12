@@ -1,18 +1,19 @@
+"use client";
 import PostButtonBar from "@/app/posts/_components/PostButtonBar/PostButtonBar";
+import { useUserStore } from "@/lib/states/User";
 import { formatDateString } from "@/lib/utils/formatDateString";
-import { Avatar, Chip, Divider, Spacer, user } from "@nextui-org/react";
+import { Avatar, Chip, Divider, Spacer } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
 
 const PostPreviewCard = ({
   post,
-  userId,
   previewType,
 }: {
   post: any;
-  userId: string | null;
   previewType: "Featured" | "Profile" | "PostList";
 }) => {
+  const userProfile = useUserStore((state) => state.userProfile);
   return (
     <div className=" px-10 py-5 rounded-3xl bg-default-100 hover:bg-default-200">
       <Link href={"/posts/" + post.post_id}>
@@ -48,7 +49,10 @@ const PostPreviewCard = ({
       </Link>
 
       <div className="w-full flex items-center justify-center">
-        <PostButtonBar postId={post.post_id} userId={userId} />
+        <PostButtonBar
+          postId={post.post_id}
+          userId={userProfile ? userProfile.id : null}
+        />
       </div>
     </div>
   );

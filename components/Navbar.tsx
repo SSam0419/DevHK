@@ -39,7 +39,6 @@ const Navbar = () => {
     const fetchUser = async () => {
       setIsLoading(true);
       const user = await supabase.auth.getUser();
-      console.log(user);
       if (user.data.user?.id) {
         setUser(user.data.user);
         const { data, error } = await supabase
@@ -53,12 +52,15 @@ const Navbar = () => {
         } else {
           setUserProfile(null);
         }
+      } else {
+        setUserProfile(null);
+        setUser(null);
       }
       setIsLoading(false);
     };
 
     fetchUser();
-  }, []);
+  }, [setUser, setUserProfile]);
 
   const menuItems = [
     {
@@ -83,8 +85,8 @@ const Navbar = () => {
 
   const signOut = async () => {
     setIsLoading(true);
-    setUser(null);
     await supabase.auth.signOut();
+    setUser(null);
     setUserProfile(null);
     setIsLoading(false);
   };

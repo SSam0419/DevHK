@@ -10,7 +10,6 @@ import PostPreviewCard from "@/components/PostPreviewCard";
 const FeaturedPosts = async () => {
   const cookieStore = cookies();
   const supabase = await createSupabaseServerClient(cookieStore);
-  const user = await supabase.auth.getUser();
   const { data: postMetric } = await supabase
     .from("post_metric")
     .select("*")
@@ -31,11 +30,7 @@ const FeaturedPosts = async () => {
           {data?.map((post: any) => {
             return (
               <div key={post.post_id}>
-                <PostPreviewCard
-                  post={post}
-                  previewType="Featured"
-                  userId={user.data.user ? user.data.user.id : null}
-                />
+                <PostPreviewCard post={post} previewType="Featured" />
               </div>
             );
           })}
