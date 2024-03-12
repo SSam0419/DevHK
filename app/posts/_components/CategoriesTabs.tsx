@@ -71,7 +71,7 @@ const CategoriesTabs = () => {
           <Button
             className="rounded-full lg:hidden"
             onClick={() => {
-              tabRefs.current[2]?.click();
+              tabRefs.current[0]?.click();
             }}
           >
             <FaArrowAltCircleLeft />
@@ -82,7 +82,7 @@ const CategoriesTabs = () => {
             aria-label="Options"
             color="primary"
             variant="bordered"
-            selectedKey={searchParams.get("category_id") || "1"}
+            selectedKey={searchParams.get("category_id") || "2"}
             // onSelectionChange={(key) => {
             //   const params = new URLSearchParams(searchParams);
             //   params.set("category_id", key.toString());
@@ -120,7 +120,7 @@ const CategoriesTabs = () => {
           <Button
             className="rounded-full lg:hidden"
             onClick={() => {
-              tabRefs.current[5]?.click();
+              tabRefs.current[categories.length - 1]?.click();
             }}
           >
             <FaArrowAltCircleRight />

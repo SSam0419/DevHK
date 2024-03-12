@@ -37,11 +37,11 @@ const LikeButton = ({
   setLikeCount: React.Dispatch<React.SetStateAction<number>>;
   setDislikeCount: React.Dispatch<React.SetStateAction<number>>;
 }) => {
-  const likePost = async () => {
+  const likePost = async (status: boolean | null) => {
     if (userId) {
       const { data, error } = await supabase.from("post_likes").upsert({
         post_id: postId,
-        is_like: isLikeBtn,
+        is_like: status,
         user_profile_id: userId,
       });
     }
@@ -92,29 +92,38 @@ const LikeButton = ({
       onClick={async () => {
         if (isLikeBtn) {
           if (like) {
+            //unlike
             setLikeCount((prev) => (prev -= 1));
             setLike(false);
+            await likePost(null);
           } else {
+            //like
             setLikeCount((prev) => (prev += 1));
             setLike(true);
 
             if (dislike) setDislikeCount((prev) => (prev -= 1));
             setDislike(false);
+
+            await likePost(true);
           }
         } else {
           if (dislike) {
+            //undislike
             setDislike(false);
             setDislikeCount((prev) => (prev -= 1));
+
+            await likePost(null);
           } else {
+            //dislike
             setDislike(true);
             setDislikeCount((prev) => (prev += 1));
 
             if (like) setLikeCount((prev) => (prev -= 1));
             setLike(false);
+
+            await likePost(false);
           }
         }
-
-        await likePost();
       }}
     >
       <div className="flex items-center gap-1">

@@ -30,12 +30,9 @@ const PostButtonBar = ({
           .maybeSingle();
 
         if (data) {
-          if (data.is_like) {
-            setLike(true);
-            setDislike(false);
-          } else {
-            setLike(false);
-            setDislike(true);
+          if (data.is_like !== null) {
+            setLike(data.is_like);
+            setDislike(!data.is_like);
           }
         }
       }
