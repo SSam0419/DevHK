@@ -7,6 +7,7 @@ import PostButtonBar from "@/app/posts/_components/PostButtonBar/PostButtonBar";
 import { formatDateString } from "@/lib/utils/formatDateString";
 import { Chip, Spacer, Divider, Skeleton } from "@nextui-org/react";
 import Link from "next/link";
+import PostPreviewCard from "@/components/PostPreviewCard";
 
 const ProfileDisplay = () => {
   const userProfile = useUserStore((state) => state.userProfile);
@@ -55,41 +56,11 @@ const ProfileDisplay = () => {
           {myPost.map((post: any) => {
             return (
               <div key={post.post_id}>
-                <div
-                  className=" p-10 rounded-3xl bg-default-100 hover:bg-default-200"
-                  key={post.post_id}
-                >
-                  <Link href={"/posts/" + post.post_id}>
-                    <div className="">
-                      <div className="h-full flex gap-2">
-                        <div className="text-2xl font-bold">
-                          {post.post_title}
-                        </div>
-                        <div className="text-base font-normal h-4/6">
-                          <Chip>{post.post_category}</Chip>
-                        </div>
-                      </div>
-
-                      <div className="text-default-600 text-small text-left">
-                        <p>{post.username}</p>
-                        {post.post_created_at && (
-                          <p>{formatDateString(post.post_created_at)}</p>
-                        )}
-                      </div>
-                    </div>{" "}
-                    <Spacer />
-                  </Link>
-
-                  <PostButtonBar
-                    postId={post.post_id}
-                    userId={userProfile !== null ? userProfile.id : null}
-                  />
-
-                  <Link href={"/posts/" + post.post_id}>
-                    <Divider className="my-3" />
-                    <div className="  ">{post.post_content}</div>
-                  </Link>
-                </div>
+                <PostPreviewCard
+                  post={post}
+                  previewType="Profile"
+                  userId={userProfile ? userProfile.id : null}
+                />
               </div>
             );
           })}

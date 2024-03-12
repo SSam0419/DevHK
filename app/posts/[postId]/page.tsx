@@ -5,6 +5,13 @@ import { Avatar, Spacer } from "@nextui-org/react";
 import { formatDateString } from "@/lib/utils/formatDateString";
 import CommentForm from "./_components/CommentForm";
 
+import { Merriweather } from "next/font/google";
+
+const merriweather = Merriweather({
+  weight: "400",
+  subsets: ["latin"],
+});
+
 export default async function Page({ params }: { params: { postId: string } }) {
   const cookieStore = cookies();
   const supabase = await createSupabaseServerClient(cookieStore);
@@ -33,7 +40,7 @@ export default async function Page({ params }: { params: { postId: string } }) {
   return (
     <div>
       {/* Post Details */}
-      <div className="border rounded-2xl p-5">
+      <div className={`border rounded-2xl p-5`}>
         <div className="text-3xl font-bold">{data.post_title}</div>
 
         <Spacer y={3} />
@@ -47,7 +54,7 @@ export default async function Page({ params }: { params: { postId: string } }) {
 
         <Spacer y={3} />
 
-        <div className="">{data.post_content}</div>
+        <div className={merriweather.className}>{data.post_content}</div>
       </div>
       <Spacer y={4} />
       {/* Comment Form*/}

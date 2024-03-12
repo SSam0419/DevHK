@@ -1,10 +1,11 @@
 import React from "react";
-import { Divider, Spacer } from "@nextui-org/react";
+import { Avatar, Divider, Spacer } from "@nextui-org/react";
 import PostButtonBar from "./PostButtonBar/PostButtonBar";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { formatDateString } from "@/lib/utils/formatDateString";
+import PostPreviewCard from "@/components/PostPreviewCard";
 
 const PostList = async ({ categoryId }: { categoryId: number }) => {
   const cookieStore = cookies();
@@ -26,33 +27,11 @@ const PostList = async ({ categoryId }: { categoryId: number }) => {
       {data?.map((post: any) => {
         return (
           <div key={post.post_id}>
-            <div
-              className=" p-10 rounded-3xl bg-default-100 hover:bg-default-200"
-              key={post.post_id}
-            >
-              <Link href={"/posts/" + post.post_id}>
-                <div className="">
-                  <div className="text-2xl font-bold">{post.post_title} </div>
-                  <div className="text-default-600 text-small text-left">
-                    <p>{post.username}</p>
-                    {post.post_created_at && (
-                      <p>{formatDateString(post.post_created_at)}</p>
-                    )}
-                  </div>
-                </div>{" "}
-                <Spacer />
-              </Link>
-
-              <PostButtonBar
-                postId={post.post_id}
-                userId={user.data.user ? user.data.user.id : null}
-              />
-
-              <Link href={"/posts/" + post.post_id}>
-                <Divider className="my-3" />
-                <div className="  ">{post.post_content}</div>
-              </Link>
-            </div>
+            <PostPreviewCard
+              post={post}
+              previewType="PostList"
+              userId={user.data.user ? user.data.user.id : null}
+            />
           </div>
         );
       })}
