@@ -1,10 +1,6 @@
 import React from "react";
-import { Avatar, Divider, Spacer } from "@nextui-org/react";
-import PostButtonBar from "./PostButtonBar/PostButtonBar";
-import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
-import { formatDateString } from "@/lib/utils/formatDateString";
 import PostPreviewCard from "@/components/PostPreviewCard";
 
 const PostList = async ({ categoryId }: { categoryId: number }) => {

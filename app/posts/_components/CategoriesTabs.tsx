@@ -4,24 +4,25 @@ import { supabase } from "@/lib/supabase/client";
 import { Tabs, Tab, Skeleton, Button } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
-import React from "react";
-import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
 
 const CategoriesTabs = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [categories, setCategories] = React.useState<
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [categories, setCategories] = useState<
     {
       category: string;
       key: number;
     }[]
   >([]);
 
-  const tabRefs = React.useRef<Array<HTMLDivElement | null>>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("2");
 
-  React.useEffect(() => {
+  const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
       const { data, error } = await supabase.from("forum_category").select("*");
@@ -41,26 +42,25 @@ const CategoriesTabs = () => {
     fetchCategories();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     tabRefs.current = tabRefs.current.slice(0, categories.length);
   }, [categories]);
 
-  // React.useEffect(() => {
-  //   if (tabRefs.current.length > 0) {
-  //     const categoryIdStr = searchParams.get("category_id");
-  //     const categoryId = categoryIdStr ? parseInt(categoryIdStr) : 1;
-  //     tabRefs.current[categoryId]?.click();
-  //   }
-  // }, [searchParams, tabRefs]);
+  //delay filter
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (selectedCategory) {
+        const params = new URLSearchParams(searchParams);
+        params.set("category_id", selectedCategory);
+        const newPath = `${pathname}?${params.toString()}`;
+        router.replace(newPath);
+      }
+    }, 500);
 
-  // const _categories = [
-  //   { key: 1, category: "Job Opportunities" },
-  //   { key: 2, category: "Technology Trends" },
-  //   { key: 3, category: "Coding Challenges" },
-  //   { key: 4, category: "Project Showcasing" },
-  //   { key: 5, category: "Tech Events and Meetups" },
-  //   { key: 7, category: "General Discussions" },
-  // ];
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [pathname, router, searchParams, selectedCategory]);
 
   return (
     <div className="flex w-full flex-col">
@@ -82,36 +82,22 @@ const CategoriesTabs = () => {
             aria-label="Options"
             color="primary"
             variant="bordered"
-            selectedKey={searchParams.get("category_id") || "2"}
-            // onSelectionChange={(key) => {
-            //   const params = new URLSearchParams(searchParams);
-            //   params.set("category_id", key.toString());
-            //   const newPath = `${pathname}?${params.toString()}`;
-            //   router.replace(newPath);
-            // }}
+            selectedKey={selectedCategory}
+            onSelectionChange={(key) => {
+              setSelectedCategory(key.toString());
+            }}
           >
             {categories.map((category, index) => {
               return (
                 <Tab
                   key={category.key}
                   title={
-                    <Link
-                      href={`/posts?category_id=${category.key}`}
-                      shallow={true}
+                    <div
+                      ref={(ref) => (tabRefs.current[index] = ref)}
+                      className="flex items-center space-x-2"
                     >
-                      <div
-                        // onClick={() => {
-                        //   const params = new URLSearchParams(searchParams);
-                        //   params.set("category_id", category.key.toString());
-                        //   const newPath = `${pathname}?${params.toString()}`;
-                        //   router.replace(newPath);
-                        // }}
-                        ref={(ref) => (tabRefs.current[index] = ref)}
-                        className="flex items-center space-x-2"
-                      >
-                        <span>{category.category}</span>
-                      </div>
-                    </Link>
+                      <span>{category.category}</span>
+                    </div>
                   }
                 />
               );
