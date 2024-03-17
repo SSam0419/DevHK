@@ -13,7 +13,6 @@ const PostPreviewCard = ({
   post: any;
   previewType: "Featured" | "Profile" | "PostList";
 }) => {
-  const userProfile = useUserStore((state) => state.userProfile);
   return (
     <div className=" px-10 py-5 rounded-3xl bg-default-100 hover:bg-default-200">
       <Link href={"/posts/" + post.post_id}>
@@ -49,10 +48,7 @@ const PostPreviewCard = ({
       </Link>
 
       <div className="w-full flex items-center justify-center">
-        <PostButtonBar
-          postId={post.post_id}
-          userId={userProfile ? userProfile.id : null}
-        />
+        <PostButtonBar postId={post.post_id} />
       </div>
     </div>
   );

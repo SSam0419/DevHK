@@ -5,17 +5,37 @@ import { useUserStore } from "@/lib/states/User";
 import { supabase } from "@/lib/supabase/client";
 import { Textarea, Button, Avatar } from "@nextui-org/react";
 import { revalidatePath, revalidateTag } from "next/cache";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const CommentForm = ({ postId }: { postId: string }) => {
   const user = useUserStore((state) => state.userProfile);
   const { hintHtml, updateHint } = useHint();
   const [comment, setComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCanSubmit(true);
+      setIsLoading(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [canSubmit]);
 
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    if (!canSubmit) {
+      updateHint({
+        error: Error(
+          "Please wait for 5 seconds before submitting another comment."
+        ),
+        text: "",
+      });
+      return;
+    }
 
     if (!user) {
       updateHint({ error: Error("You must login to comment!"), text: "" });
@@ -40,6 +60,7 @@ const CommentForm = ({ postId }: { postId: string }) => {
       revalidatePost();
     }
 
+    setCanSubmit(false);
     setIsLoading(false);
   };
 

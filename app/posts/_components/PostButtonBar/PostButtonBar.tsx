@@ -6,14 +6,17 @@ import ShareButton from "./ShareButton";
 import { ButtonGroup, Tooltip } from "@nextui-org/react";
 import ViewIcon from "./ViewIcon";
 import { supabase } from "@/lib/supabase/client";
+import { useUserStore } from "@/lib/states/User";
 
 const PostButtonBar = ({
   postId,
-  userId,
-}: {
+}: // userId,
+{
   postId: string;
-  userId: string | null;
+  // userId: string | null;
 }) => {
+  const userProfile = useUserStore((state) => state.userProfile);
+
   const [like, setLike] = useState(false);
   const [dislike, setDislike] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -21,12 +24,12 @@ const PostButtonBar = ({
 
   useEffect(() => {
     const findIsLike = async () => {
-      if (userId) {
+      if (userProfile) {
         const { data, error } = await supabase
           .from("post_likes")
           .select("*")
           .eq("post_id", postId)
-          .eq("user_profile_id", userId)
+          .eq("user_profile_id", userProfile.id)
           .maybeSingle();
 
         if (data) {
@@ -59,7 +62,7 @@ const PostButtonBar = ({
     findIsLike();
     findLikeCount();
     findDislikeCount();
-  }, [postId, userId]);
+  }, [postId, userProfile]);
 
   return (
     <ButtonGroup
@@ -69,16 +72,16 @@ const PostButtonBar = ({
         e.stopPropagation();
       }}
     >
-      <ViewIcon postId={postId} userId={userId} />
+      <ViewIcon postId={postId} userId={userProfile ? userProfile.id : null} />
       <LikeButton
         isLikeBtn={true}
         dislikeCount={dislikeCount}
         like={like}
         setLike={setLike}
         setDislike={setDislike}
-        isDisabled={userId == null}
+        isDisabled={userProfile == null}
         postId={postId}
-        userId={userId}
+        userId={userProfile ? userProfile.id : null}
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setDislikeCount={setDislikeCount}
@@ -90,9 +93,9 @@ const PostButtonBar = ({
         like={like}
         setLike={setLike}
         setDislike={setDislike}
-        isDisabled={userId == null}
+        isDisabled={userProfile == null}
         postId={postId}
-        userId={userId}
+        userId={userProfile ? userProfile.id : null}
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setDislikeCount={setDislikeCount}

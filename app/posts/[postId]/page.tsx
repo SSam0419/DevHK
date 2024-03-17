@@ -6,6 +6,7 @@ import { formatDateString } from "@/lib/utils/formatDateString";
 import CommentForm from "./_components/CommentForm";
 
 import { Merriweather } from "next/font/google";
+import PostButtonBar from "../_components/PostButtonBar/PostButtonBar";
 
 const merriweather = Merriweather({
   weight: "400",
@@ -55,6 +56,10 @@ export default async function Page({ params }: { params: { postId: string } }) {
         <Spacer y={3} />
 
         <div className={merriweather.className}>{data.post_content}</div>
+
+        <Spacer y={3} />
+
+        <PostButtonBar postId={data.post_id!} />
       </div>
       <Spacer y={4} />
       {/* Comment Form*/}
