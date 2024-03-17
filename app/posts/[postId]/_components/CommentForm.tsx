@@ -4,7 +4,6 @@ import useHint from "@/lib/hooks/useHint";
 import { useUserStore } from "@/lib/states/User";
 import { supabase } from "@/lib/supabase/client";
 import { Textarea, Button, Avatar } from "@nextui-org/react";
-import { revalidatePath, revalidateTag } from "next/cache";
 import React, { useEffect, useState } from "react";
 
 const CommentForm = ({ postId }: { postId: string }) => {
@@ -21,7 +20,7 @@ const CommentForm = ({ postId }: { postId: string }) => {
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [canSubmit]);
+  }, [canSubmit, updateHint]);
 
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +56,7 @@ const CommentForm = ({ postId }: { postId: string }) => {
     updateHint({ error, text: "Comment Created" });
 
     if (!error) {
-      revalidatePost();
+      await revalidatePost();
     }
 
     setCanSubmit(false);
