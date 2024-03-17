@@ -25,6 +25,19 @@ const ProfileForm = () => {
     }
 
     setIsLoading(true);
+
+    const { data: checkUsername } = await supabase
+      .from("user_profile")
+      .select("username")
+      .eq("username", username)
+      .maybeSingle();
+
+    if (checkUsername !== null && checkUsername.username !== null) {
+      updateHint({ error: Error("Username Already Registered!"), text: "" });
+      setIsLoading(false);
+      return;
+    }
+
     const { data, error } = await supabase
       .from("user_profile")
       .insert({ biography, username, created_by: userId })
@@ -60,6 +73,7 @@ const ProfileForm = () => {
           isRequired
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          description="You CANNOT Change Your Username After creation"
         ></Input>
         <Textarea
           isDisabled={isLoading}

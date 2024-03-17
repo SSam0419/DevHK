@@ -1,8 +1,16 @@
 "use client";
 
 import useHint from "@/lib/hooks/useHint";
+import { useUserStore } from "@/lib/states/User";
 import { supabase } from "@/lib/supabase/client";
-import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import {
+  Button,
+  Input,
+  Select,
+  SelectItem,
+  Spacer,
+  Textarea,
+} from "@nextui-org/react";
 import React, { useState } from "react";
 
 const PostForm = ({
@@ -13,6 +21,8 @@ const PostForm = ({
     id: number;
   }[];
 }) => {
+  const userProfile = useUserStore((state) => state.userProfile);
+
   const [isLoading, setIsLoading] = useState(false);
   const { hintHtml, updateHint } = useHint();
   const [category, setCategory] = useState(1);
@@ -42,7 +52,9 @@ const PostForm = ({
         placeholder="select category for your post"
         label="Category"
         isRequired
-        isDisabled={isLoading}
+        isDisabled={
+          userProfile == null || userProfile == undefined || isLoading
+        }
         onChange={(e) => {
           setCategory(Number(e.target.value));
         }}
@@ -54,7 +66,9 @@ const PostForm = ({
         ))}
       </Select>
       <Input
-        isDisabled={isLoading}
+        isDisabled={
+          userProfile == null || userProfile == undefined || isLoading
+        }
         isRequired
         placeholder="post title ... "
         label="Title"
@@ -62,7 +76,9 @@ const PostForm = ({
         onChange={(e) => setTitle(e.target.value)}
       />
       <Textarea
-        isDisabled={isLoading}
+        isDisabled={
+          userProfile == null || userProfile == undefined || isLoading
+        }
         isRequired
         placeholder="post content ... "
         label="Content"
@@ -75,9 +91,23 @@ const PostForm = ({
         color="primary"
         type="submit"
         isLoading={isLoading}
+        isDisabled={
+          userProfile == null || userProfile == undefined || isLoading
+        }
       >
         Create Post
       </Button>
+      {(userProfile == null || userProfile == undefined) && (
+        <>
+          <Spacer y={4} />
+          <p className="text-danger">
+            {userProfile == undefined
+              ? "Sign In To Create Post"
+              : "Create User Profile to Create Post"}
+          </p>
+          <Spacer y={4} />
+        </>
+      )}
     </form>
   );
 };
